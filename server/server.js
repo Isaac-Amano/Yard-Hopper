@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-require('dotenv').config();
+require('dotenv').config();  // Load environment variables
 const PORT = process.env.PORT || 5001;
 
 // Middleware Includes
@@ -9,6 +9,7 @@ const passport = require('./strategies/user.strategy');
 
 // Route Includes
 const userRouter = require('./routes/user.router');
+const imageRouter = require('./routes/image.router'); // Import the image router
 
 // Express Middleware
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/api/user', userRouter);
+app.use('/api/image', imageRouter); // Add the image upload route
 
 // Listen Server & Port
 app.listen(PORT, () => {
