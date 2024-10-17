@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import ImageUpload from '../ImageUpload/ImageUpload';
 
 import {
   HashRouter as Router,
@@ -12,6 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
+// import ImageUpload from '../ImageUpload/ImageUpload';
+import ImageUpload from '../ImageUpload';
+
+
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
