@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import ImageUpload from '../ImageUpload/ImageUpload';
+
 import {
   HashRouter as Router,
   Redirect,
@@ -67,6 +69,13 @@ function App() {
           >
             <InfoPage />
           </ProtectedRoute>
+
+          <ProtectedRoute
+           exact
+          path="/upload">
+          <ImageUpload />
+          </ProtectedRoute>
+
 
           <Route
             exact
