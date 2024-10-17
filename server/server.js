@@ -24,10 +24,11 @@ app.use(sessionMiddleware);
 // Start Passport Sessions
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/api/listings', listingRouter);
 
 // Routes
 app.use('/api/user', userRouter);
-app.use('/api/image', imageRouter); // Add the image upload route
+app.use('/api/image', imageRouter); // not sure
 
 // Listen Server & Port
 app.listen(PORT, () => {
