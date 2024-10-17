@@ -14,6 +14,9 @@ import Footer from '../Footer/Footer';
 // import ImageUpload from '../ImageUpload/ImageUpload';
 import ImageUpload from '../ImageUpload/ImageUpload';
 
+import ViewListings from '../ViewListings/ViewListings';
+
+
 
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -51,7 +54,15 @@ function App() {
             path="/about"
           >
             <AboutPage />
+          
+          
+          {/* I should add a route for view listing below */}
           </Route>
+
+          <Route exact path="/listings">
+  <ViewListings />
+</Route>
+
 
           {/* For protected routes, the view could show one of several things on the same route.
             Visiting localhost:5173/user will show the UserPage if the user is logged in.
