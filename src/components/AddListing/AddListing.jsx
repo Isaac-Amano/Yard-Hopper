@@ -17,8 +17,22 @@ const AddListing = () => {
     
     dispatch({
       type: 'ADD_LISTING',
-      payload: { title, description, image_url, phone_number, address, city, state }
+      payload: { title,
+         description, 
+         image_url, 
+         phone_number, 
+         address, 
+         city, 
+        state }
     });
+    // need a code here to clear input fields once subm,itted
+    setTitle('');
+    setDescription('');
+    setImageUrl('');
+    setPhoneNumber('');
+    setAddress('');
+    setCity('');
+    setState('');
   };
 
   return (
