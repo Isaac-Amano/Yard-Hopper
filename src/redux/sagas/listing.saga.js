@@ -4,7 +4,10 @@ import axios from 'axios';
 // Saga to fetch listings from the server
 function* fetchListings() {
   try {
+
+    console.log('Fetching listings')
     const response = yield axios.get('/api/listings');
+    console.log('Listings ', response.data);
     yield put({ type: 'SET_LISTINGS', payload: response.data });
   } catch (error) {
     console.error('Error fetching listings:', error);

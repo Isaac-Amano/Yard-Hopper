@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchListings } from '../redux/actions/listingActions';  // Adjust the path as needed
 
 const ViewListings = () => {
   const dispatch = useDispatch();
-  const listings = useSelector((state) => state.listings);
-
+  const listings = useSelector((state) => state.listings ||[]);  
   useEffect(() => {
-    dispatch(fetchListings());
+    // Dispatch the action to fetch listings (handled by the saga)
+    dispatch({ type: 'FETCH_LISTINGS' });
   }, [dispatch]);
 
   return (
