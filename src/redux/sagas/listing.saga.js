@@ -6,9 +6,10 @@ function* fetchListings() {
   try {
 
     console.log('Fetching listings')
-    const response = yield axios.get('/api/listings');
+    const response = yield 
+    axios.get('/api/listings/mylistings');
     console.log('Listings ', response.data);
-    yield put({ type: 'SET_LISTINGS', payload: response.data });
+    yield put({ type: 'SET__USER_LISTINGS', payload: response.data });
   } catch (error) {
     console.error('Error fetching listings:', error);
   }
