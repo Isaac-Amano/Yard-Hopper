@@ -28,8 +28,12 @@ const MyListings = () => {
               <h3>{listing.title}</h3>
               <p>{listing.description}</p>
               <p>{listing.city}, {listing.state}</p>
-              {/* Buttons to Edit or Delete Listing */}
+              
               <button>Edit</button>
+
+
+                {/* Edit button onclick add it below!!!! */}
+              {/* <button onClick={() => handleEdit(listing.id)}>Delete</button> */}
               <button onClick={() => handleDelete(listing.id)}>Delete</button>
             </div>
           ))

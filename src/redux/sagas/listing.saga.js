@@ -1,7 +1,18 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-// Saga to fetch listings from the server
+function* deleteListing(action) {
+    try {
+      const listingId = action.payload;
+      yield axios.delete(`/api/listings/${listingId}`);
+      
+      // After deleting, fetch the updated listings
+      yield put({ type: 'FETCH_USER_LISTINGS' });  // This will refetch the user's listings
+    } catch (error) {
+      console.error('Error deleting listing:', error);
+    }
+  }
+
 function* fetchListings() {
   try {
     console.log('Fetching listings');
@@ -25,6 +36,8 @@ function* addListing(action) {
 function* listingsSaga() {
   yield takeLatest('FETCH_LISTINGS', fetchListings);  // Watch for FETCH_LISTINGS action
   yield takeLatest('ADD_LISTING', addListing);  // Watch for ADD_LISTING action
+  yield takeLatest('DELETE_LISTING', deleteListing); 
 }
+
 
 export default listingsSaga;
