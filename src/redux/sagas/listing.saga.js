@@ -6,7 +6,7 @@ function* deleteListing(action) {
       const listingId = action.payload;
       yield axios.delete(`/api/listings/${listingId}`);
       
-      // After deleting, fetch the updated listings
+      // After deleting, this will fetch the updated listings
       yield put({ type: 'FETCH_USER_LISTINGS' });  // This will refetch the user's listings
     } catch (error) {
       console.error('Error deleting listing:', error);

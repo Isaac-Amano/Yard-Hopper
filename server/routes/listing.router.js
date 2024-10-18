@@ -66,11 +66,18 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const queryParams = [listingId, userId];
 
   pool.query(queryText, queryParams)
-    .then(() => res.sendStatus(204))  
-    .catch((err) => {
-      console.error('Error deleting listing:', err);
-      res.sendStatus(500);  
-    });
+  .then((result) => {
+    if (result.rowCount === 0) {
+      console.log('nothing found to delete');
+      return res.sendStatus(404);
+    }
+    console.log('Listing deleted:', result.rowCount);
+    res.sendStatus(204);  // yay!
+  })
+  .catch((err) => {
+    console.error('Error deleting listing:', err);
+    res.sendStatus(500);
+  });
 });
 
 
