@@ -14,6 +14,7 @@ import Footer from '../Footer/Footer';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import ViewListings from '../ViewListings/ViewListings';
 import MyListings from '../MyListings/MyListings';
+import AddListing from '../AddListing/AddListing';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
@@ -57,6 +58,14 @@ function App() {
           {/* Protected Route: View Listings */}
           <ProtectedRoute exact path="/listings">
             <ViewListings />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/mylistings">
+          <MyListings />
+      </ProtectedRoute>
+
+          <ProtectedRoute exact path="/addlisting">
+            <AddListing />
           </ProtectedRoute>
 
           {/* Protected Route: User Page */}
