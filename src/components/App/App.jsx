@@ -13,6 +13,7 @@ import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import ViewListings from '../ViewListings/ViewListings';
+import MyListings from '../MyListings/MyListings';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
@@ -22,6 +23,13 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+
+
+// Inside the Switch component
+<ProtectedRoute exact path="/mylistings">
+  <MyListings />
+</ProtectedRoute>
+
 
 import './App.css';
 
