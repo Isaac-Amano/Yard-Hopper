@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchListings } from '../redux/actions/listingActions';  // Adjust the path as needed
 
 const ViewListings = () => {
-  const [listings, setListings] = useState([]);
+  const dispatch = useDispatch();
+  const listings = useSelector((state) => state.listings);
 
-  // Fetch the listings from the backend
   useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const response = await axios.get('/api/listings');
-        setListings(response.data);
-      } catch (error) {
-        console.error('Error fetching listings:', error);
-      }
-    };
-
-    fetchListings();
-  }, []);
+    dispatch(fetchListings());
+  }, [dispatch]);
 
   return (
     <div>
-      <h2>All Listings</h2>
-      <div className="listings-grid">
+      <h2>Current Listings</h2>
+      <div className="listing-grid">
         {listings.length > 0 ? (
           listings.map((listing) => (
-            <div key={listing.id} className="listing">
+            <div key={listing.id} className="listing-card">
+              <img src={listing.image_url} alt={listing.title} />
               <h3>{listing.title}</h3>
               <p>{listing.description}</p>
-              <p>Phone: {listing.phone_number}</p>
-              <p>Address: {listing.address}, {listing.city}, {listing.state}</p>
-              {listing.image_url && (
-                <img src={listing.image_url} alt={listing.title} style={{ width: '200px' }} />
-              )}
+              <p>{listing.city}, {listing.state}</p>
             </div>
           ))
         ) : (
-          <p>No listings available.</p>
+          <p>No listings available</p>
         )}
       </div>
     </div>
