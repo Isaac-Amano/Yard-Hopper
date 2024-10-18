@@ -3,12 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const MyListings = () => {
   const dispatch = useDispatch();
-  const userListings = useSelector((state) => state.userListings);  // Use user-specific listings from Redux
+  const userListings = useSelector((state) => state.userListings);  // listings from Redux
 
   useEffect(() => {
-    // Dispatch the action to fetch the user's listings
+    
     dispatch({ type: 'FETCH_USER_LISTINGS' });
   }, [dispatch]);
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this listing?')){
+        dispatch({ type: 'DELETE_LISTING', payload: id });
+    }
+  };
+
 
   return (
     <div>
@@ -23,7 +30,7 @@ const MyListings = () => {
               <p>{listing.city}, {listing.state}</p>
               {/* Buttons to Edit or Delete Listing */}
               <button>Edit</button>
-              <button>Delete</button>
+              <button onClick={() => handleDelete(listing.id)}>Delete</button>
             </div>
           ))
         ) : (
