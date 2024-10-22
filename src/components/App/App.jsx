@@ -15,6 +15,8 @@ import ImageUpload from '../ImageUpload/ImageUpload';
 import ViewListings from '../ViewListings/ViewListings';
 import MyListings from '../MyListings/MyListings';
 import AddListing from '../AddListing/AddListing';
+import EditListing from '../EditListing/EditListing';  
+
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
@@ -82,7 +84,10 @@ function App() {
           <ProtectedRoute exact path="/upload">
             <ImageUpload />
           </ProtectedRoute>
-
+            
+          <ProtectedRoute exact path="/edit/:id">  {/* Add this route for Edit Listing */}
+            <EditListing />
+          </ProtectedRoute>
           {/* Public Route: Login Page */}
           <Route exact path="/login">
             {user.id ? <Redirect to="/user" /> : <LoginPage />}
@@ -97,10 +102,10 @@ function App() {
           <Route exact path="/home">
             {user.id ? <Redirect to="/user" /> : <LandingPage />}
           </Route>
-
+         
           {/* 404 Page */}
           <Route>
-            <h1>404</h1>
+            <h1>An error has occured, Please contact support</h1>
           </Route>
         </Switch>
         <Footer />

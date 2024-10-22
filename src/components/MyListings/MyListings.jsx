@@ -16,6 +16,12 @@ const MyListings = () => {
     }
   };
 
+  const handleEdit = (id) => {
+
+    history.pushState(`/edit/${id}`);
+
+  };
+
 
   return (
     <div>
@@ -33,7 +39,7 @@ const MyListings = () => {
 
 
                 {/* Edit button onclick add it below!!!! */}
-              {/* <button onClick={() => handleEdit(listing.id)}>Delete</button> */}
+              <button onClick={() => handleEdit(listing.id)}>Delete</button>
               <button onClick={() => handleDelete(listing.id)}>Delete</button>
             </div>
           ))
