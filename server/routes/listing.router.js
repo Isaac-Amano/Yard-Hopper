@@ -80,5 +80,34 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
   });
 });
 
+router.put('/:id', rejectUnauthenticated, (req, res) => {
+  const listingId = req.params.id;
+  const userId = req.user.id;  // Ensure that the logged-in user owns the listing
+
+  const { title, description, phone_number, address, city, state } = req.body;
+
+  const queryText = `
+    UPDATE listings 
+    SET title = $1, description = $2, phone_number = $3, address = $4, city = $5, state = $6
+    WHERE id = $7 AND user_id = $8
+    RETURNING *;
+  `;
+  const queryParams = [title, description, phone_number, address, city, state, listingId, userId];
+
+  pool.query(queryText, queryParams)
+    .then((result) => {
+      if (result.rowCount === 0) {
+        res.sendStatus(404); // Not found or user does not own the listing
+      } else {
+        res.json(result.rows[0]);
+      }
+    })
+    .catch((error) => {
+      console.error('Error updating listing:', error);
+      res.sendStatus(500);
+    });
+});
+
+
 
 module.exports = router;

@@ -1,5 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
+import EditListing from '../../components/EditListing/EditListing';
 
 // Saga to handle deleting a listing
 function* deleteListing(action) {
@@ -58,6 +59,8 @@ function* listingsSaga() {
 
   // Watch for the 'DELETE_LISTING' action to delete a listing
   yield takeLatest('DELETE_LISTING', deleteListing);
+
+  yield takeLatest ('EDIT_LISTING', EditListing)
 }
 
 export default listingsSaga;
