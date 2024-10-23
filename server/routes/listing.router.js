@@ -5,6 +5,8 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 
 
 // Current listings on DB not showing, even if i hard coded dummy data into DB 
+
+// router.get('/listings', (req, res) => {
 router.get('/', (req, res) => {
   const queryText = 'SELECT * FROM listings ORDER BY created_at DESC;';
   
@@ -23,6 +25,8 @@ router.get('/', (req, res) => {
 
 
 // my listing is not working, nothing is showing even after i add a listing 
+
+// router.get('/mylistings', rejectUnauthenticated, (req, res) => {
 router.get('/mylistings', rejectUnauthenticated, (req, res) => {
   const queryText = 'SELECT * FROM listings WHERE user_id = $1 ORDER BY created_at DESC;';
   const queryParams = [req.user.id];  

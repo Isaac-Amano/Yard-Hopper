@@ -34,7 +34,7 @@ function* fetchListings() {
     console.log('Fetching user listings');
     
     // Fetch the user's listings from the server
-    const response = yield axios.get('/api/listings/mylistings');  // Ensure yield and axios.get are on the same line
+    const response = yield axios.get('/api/listings/mylistings');  
     console.log('User Listings:', response.data);
 
     // Dispatch the action to update the state with the fetched listings
@@ -58,7 +58,7 @@ function* addListing(action) {
 }
 
 
-//  this saga is for the initial listings page to fetch all listings
+//  this saga is for the initial listings page to fetch all listings, not working tho
 function* fetchAllListings() {
   try {
     const response = yield axios.get('/api/listings'); 
@@ -76,7 +76,7 @@ function* fetchSingleListing(action) {
     console.error('Error fetching single listing:', error);
   }
 }
-// Root saga goes below, dont forget to add fetch_singke_listing
+// Root saga goes below, dont forget to add fetch_singke_listing!!!!
 function* listingsSaga() {
   
   yield takeLatest('FETCH_USER_LISTINGS', fetchListings);
@@ -89,7 +89,7 @@ function* listingsSaga() {
 
   yield takeLatest('FETCH_ALL_LISTINGS', fetchAllListings);
 
-  yield takeLatest('FETCH_SINGLE_LISTING', fetchSingleListing);
+  yield takeLatest('FETCH_SINGLE_LISTING', fetchSingleListing); 
 }
 
 export default listingsSaga;
