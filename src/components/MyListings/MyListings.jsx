@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useHistory } from 'react-router-dom';
 const MyListings = () => {
   const dispatch = useDispatch();
   const userListings = useSelector((state) => state.userListings);  // listings from Redux
-
+  const history = useHistory();
   useEffect(() => {
     
     dispatch({ type: 'FETCH_USER_LISTINGS' });
@@ -17,8 +17,8 @@ const MyListings = () => {
   };
 
   const handleEdit = (id) => {
-
-    history.pushState(`/edit/${id}`);
+    console.log(`Edit button clicked for listing ID: ${id}`); 
+    history.push(`/edit/${id}`);
 
   };
 
@@ -35,11 +35,9 @@ const MyListings = () => {
               <p>{listing.description}</p>
               <p>{listing.city}, {listing.state}</p>
               
-              <button>Edit</button>
 
-
-                {/* Edit button onclick add it below!!!! */}
-              <button onClick={() => handleEdit(listing.id)}>Delete</button>
+            
+              <button onClick={() => handleEdit(listing.id)}>Edit</button>
               <button onClick={() => handleDelete(listing.id)}>Delete</button>
             </div>
           ))

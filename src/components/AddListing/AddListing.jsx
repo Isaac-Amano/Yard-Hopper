@@ -11,13 +11,15 @@ const AddListing = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
     
     dispatch({
       type: 'ADD_LISTING',
-      payload: { title,
+      payload: 
+      { title,
          description, 
          image_url, 
          phone_number, 
@@ -33,6 +35,13 @@ const AddListing = () => {
     setAddress('');
     setCity('');
     setState('');
+
+    setSuccessMessage('Listing added!');
+
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+
   };
 
   return (
@@ -88,6 +97,8 @@ const AddListing = () => {
         />
         <button type="submit">Add Listing</button>
       </form>
+
+      {successMessage && <p>{successMessage}</p>}
     </div>
   );
 };

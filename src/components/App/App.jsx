@@ -52,12 +52,12 @@ function App() {
           {/* Redirect root URL to /home */}
           <Redirect exact from="/" to="/home" />
 
-          {/* Public Route: About Page */}
+          {/* Public Route for About Page */}
           <Route exact path="/about">
             <AboutPage />
           </Route>
 
-          {/* Protected Route: View Listings */}
+          {/* Protected Route for  View Listings */}
           <ProtectedRoute exact path="/listings">
             <ViewListings />
           </ProtectedRoute>
@@ -85,7 +85,7 @@ function App() {
             <ImageUpload />
           </ProtectedRoute>
             
-          <ProtectedRoute exact path="/edit/:id">  {/* Add this route for Edit Listing */}
+          <ProtectedRoute exact path="/edit/:id">  
             <EditListing />
           </ProtectedRoute>
           {/* Public Route: Login Page */}

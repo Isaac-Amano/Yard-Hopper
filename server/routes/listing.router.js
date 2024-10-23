@@ -4,26 +4,42 @@ const pool = require('../modules/pool');
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
 
-router.get('/mylistings', rejectUnauthenticated,(req, res) => {
+// Current listings on DB not showing, even if i hard coded dummy data into DB 
+router.get('/', (req, res) => {
+  const queryText = 'SELECT * FROM listings ORDER BY created_at DESC;';
+  
+  pool.query(queryText)
+    .then((result) => {
+      res.status(200).json(result.rows); 
+
+      console.log('All Listings:', result.rows);
+
+    })
+    .catch((error) => {
+      console.error('Error fetching listings:', error);
+      res.status(500).json({ error});
+    });
+});
+
+
+// my listing is not working, nothing is showing even after i add a listing 
+router.get('/mylistings', rejectUnauthenticated, (req, res) => {
   const queryText = 'SELECT * FROM listings WHERE user_id = $1 ORDER BY created_at DESC;';
-
-
   const queryParams = [req.user.id];  
 
   pool.query(queryText, queryParams)
     .then((result) => {
-      res.status(200).json(result.rows); 
-      console.log('Logged-in user:', req.user);
- 
+      res.status(200).json(result.rows);
+      console.log('User Listings:', result.rows);
     })
     .catch((error) => {
-      console.error('Error fetching listings:', error);
-      res.status(500).json({ error: 'Error fetching listings' });
+      console.error('Error fetching user listings:', error);
+      res.status(500).json({ error: 'Error fetching user listings' });
     });
 });
 
 router.post('/', rejectUnauthenticated, (req, res) => {
-  console.log('Received data for new listing:', req.body);  
+  console.log('Received stuff for new listing:', req.body);  
 
   
   const { title, description, 
@@ -72,7 +88,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
       return res.sendStatus(404);
     }
     console.log('Listing deleted:', result.rowCount);
-    res.sendStatus(204);  // yay!
+    res.sendStatus(204);  
   })
   .catch((err) => {
     console.error('Error deleting listing:', err);
@@ -82,7 +98,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
 
 router.put('/:id', rejectUnauthenticated, (req, res) => {
   const listingId = req.params.id;
-  const userId = req.user.id;  // Ensure that the logged-in user owns the listing
+  const userId = req.user.id;  
 
   const { title, description, phone_number, address, city, state } = req.body;
 
@@ -97,7 +113,7 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
   pool.query(queryText, queryParams)
     .then((result) => {
       if (result.rowCount === 0) {
-        res.sendStatus(404); // Not found or user does not own the listing
+        res.sendStatus(404); 
       } else {
         res.json(result.rows[0]);
       }

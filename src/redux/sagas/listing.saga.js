@@ -2,13 +2,11 @@ import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 import EditListing from '../../components/EditListing/EditListing';
 
-// Saga to handle deleting a listing
 function* deleteListing(action) {
   try {
-    const listingId = action.payload; // The ID of the listing to delete
-    console.log(`Deleting listing with ID: ${listingId}`);  // Log the listing ID being sent
+    const listingId = action.payload; 
+    console.log(`Deleting listing with ID: ${listingId}`);  
 
-    // Perform the DELETE request to remove the listing
     yield axios.delete(`/api/listings/${listingId}`);
 
     console.log('Listing deleted successfully');
@@ -20,6 +18,16 @@ function* deleteListing(action) {
   }
 }
 
+function* updateListing(action) {
+  try {
+    const { id, ...updatedListing } = action.payload; // Extract the ID and the updated listing data
+    yield axios.put(`/api/listings/${id}`, updatedListing);
+    console.log('Edit listing successful');
+    yield put({ type: 'FETCH_USER_LISTINGS' }); // Fetch updated listings after editing
+  } catch (error) {
+    console.error('Error updating listing:', error);
+  }
+}
 // Saga to handle fetching user listings
 function* fetchListings() {
   try {
@@ -36,7 +44,7 @@ function* fetchListings() {
   }
 }
 
-// Saga to handle adding a new listing
+// Saga to handle adding a new listing goes here 
 function* addListing(action) {
   try {
     // Send the listing data to the server
@@ -49,18 +57,39 @@ function* addListing(action) {
   }
 }
 
-// Root saga to watch for relevant actions
+
+//  this saga is for the initial listings page to fetch all listings
+function* fetchAllListings() {
+  try {
+    const response = yield axios.get('/api/listings'); 
+    yield put({ type: 'SET_LISTINGS', payload: response.data });
+    console.log('Listings fetched:', response.data); 
+  } catch (error) {
+    console.error('Error fetching all listings:', error);
+  }
+}
+function* fetchSingleListing(action) {
+  try {
+    const response = yield axios.get(`/api/listings/${action.payload}`); // Fetch single listing by ID
+    yield put({ type: 'SET_SINGLE_LISTING', payload: response.data });  // Store the result in Redux
+  } catch (error) {
+    console.error('Error fetching single listing:', error);
+  }
+}
+// Root saga goes below, dont forget to add fetch_singke_listing
 function* listingsSaga() {
-  // Watch for the 'FETCH_LISTINGS' action to fetch user listings
+  
   yield takeLatest('FETCH_USER_LISTINGS', fetchListings);
 
-  // Watch for the 'ADD_LISTING' action to add a new listing
   yield takeLatest('ADD_LISTING', addListing);
 
-  // Watch for the 'DELETE_LISTING' action to delete a listing
   yield takeLatest('DELETE_LISTING', deleteListing);
 
-  yield takeLatest ('EDIT_LISTING', EditListing)
+  yield takeLatest('UPDATE_LISTING', updateListing);
+
+  yield takeLatest('FETCH_ALL_LISTINGS', fetchAllListings);
+
+  yield takeLatest('FETCH_SINGLE_LISTING', fetchSingleListing);
 }
 
 export default listingsSaga;
