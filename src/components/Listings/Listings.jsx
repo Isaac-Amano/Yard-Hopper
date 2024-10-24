@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { Link } from 'react-router-dom'; //for nav
 
 const Listings = () => {
   const dispatch = useDispatch();
@@ -27,7 +27,8 @@ const Listings = () => {
             <div key={listing.id} className="listing-card">
               <h3>{listing.title}</h3>
               <p>{listing.description}</p>
-           
+              {/* Link to individual listing's detail page */}
+              <Link to={`/listings/${listing.id}`}>View Details</Link>
             </div>
           ))
         ) : (

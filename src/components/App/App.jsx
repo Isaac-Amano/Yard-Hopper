@@ -12,11 +12,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import ImageUpload from '../ImageUpload/ImageUpload';
-import ViewListings from '../ViewListings/ViewListings';
+import Listings from '../Listings/Listings';  // This shows all listings
+import ViewListing from '../ViewListing';  // This is not working
+
 import MyListings from '../MyListings/MyListings';
 import AddListing from '../AddListing/AddListing';
 import EditListing from '../EditListing/EditListing';  
-
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
@@ -26,13 +27,6 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
-
-
-// Inside the Switch component
-<ProtectedRoute exact path="/mylistings">
-  <MyListings />
-</ProtectedRoute>
-
 
 import './App.css';
 
@@ -57,15 +51,23 @@ function App() {
             <AboutPage />
           </Route>
 
-          {/* Protected Route for  View Listings */}
+          {/* Protected Route for View Listings (All Listings) */}
+          {/* Protected Route for Listings (All Listings) */}
           <ProtectedRoute exact path="/listings">
-            <ViewListings />
+            <Listings /> {/* Fixed: This now points to Listings instead of ViewListings */}
           </ProtectedRoute>
 
-          <ProtectedRoute exact path="/mylistings">
-          <MyListings />
-      </ProtectedRoute>
+           {/* Protected Route for Single Listing (Details of One Listing) */}
+           <ProtectedRoute exact path="/listings/:id">
+            <ViewListing /> {/* This shows details for a specific listing */}
+          </ProtectedRoute>
 
+          {/* Protected Route for My Listings */}
+          <ProtectedRoute exact path="/mylistings">
+            <MyListings />
+          </ProtectedRoute>
+
+          {/* Protected Route for Adding a Listing */}
           <ProtectedRoute exact path="/addlisting">
             <AddListing />
           </ProtectedRoute>
@@ -84,10 +86,12 @@ function App() {
           <ProtectedRoute exact path="/upload">
             <ImageUpload />
           </ProtectedRoute>
-            
+
+          {/* Protected Route for Editing a Listing */}
           <ProtectedRoute exact path="/edit/:id">  
             <EditListing />
           </ProtectedRoute>
+
           {/* Public Route: Login Page */}
           <Route exact path="/login">
             {user.id ? <Redirect to="/user" /> : <LoginPage />}
@@ -102,10 +106,10 @@ function App() {
           <Route exact path="/home">
             {user.id ? <Redirect to="/user" /> : <LandingPage />}
           </Route>
-         
-          {/* 404 Page */}
+
+          {/* Catch-All Route for Undefined Routes (404) */}
           <Route>
-            <h1>An error has occured, Please contact support</h1>
+            <h1>An error has occurred, Please contact support</h1>
           </Route>
         </Switch>
         <Footer />
