@@ -20,8 +20,8 @@ const ViewListing = () => {
       <h2>{listing.title}</h2>
       <p>{listing.description}</p>
       <p>Location: {listing.city}, {listing.state}</p>
-      {/* Additional details about the listing can be added here */}
-      {/* You can also add a Google Maps integration here */}
+      {/* will add additional info/}
+      {/* will add maps */}
     </div>
   );
 };
