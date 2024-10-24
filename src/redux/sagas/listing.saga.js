@@ -1,6 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
-import EditListing from '../../components/EditListing/EditListing';
+// import EditListing from '../../components/EditListing/EditListing';
 
 function* deleteListing(action) {
   try {
@@ -61,7 +61,7 @@ function* addListing(action) {
 //  this saga is for the initial listings page to fetch all listings, not working tho
 function* fetchAllListings() {
   try {
-    const response = yield axios.get('/api/listings'); 
+    const response = yield axios.get('/api/listings/')
     yield put({ type: 'SET_LISTINGS', payload: response.data });
     console.log('Listings fetched:', response.data); 
   } catch (error) {
@@ -70,7 +70,9 @@ function* fetchAllListings() {
 }
 function* fetchSingleListing(action) {
   try {
-    const response = yield axios.get(`/api/listings/${action.payload}`); // Fetch single listing by ID
+    // error happening below but I don't know
+    console.log('Fetching listing with listing ID:', action.payload);
+    const response = yield axios.get(`/api/listings/${action.payload}`); // Fetch single listing 
     yield put({ type: 'SET_SINGLE_LISTING', payload: response.data });  // Store the result in Redux
   } catch (error) {
     console.error('Error fetching single listing:', error);

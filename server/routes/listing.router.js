@@ -3,30 +3,22 @@ const router = express.Router();
 const pool = require('../modules/pool'); 
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
-
-// Current listings on DB not showing, even if i hard coded dummy data into DB 
-
-// router.get('/listings', (req, res) => {
+// Fetch all listings
 router.get('/', (req, res) => {
   const queryText = 'SELECT * FROM listings ORDER BY created_at DESC;';
   
   pool.query(queryText)
     .then((result) => {
       res.status(200).json(result.rows); 
-
       console.log('All Listings:', result.rows);
-
     })
     .catch((error) => {
       console.error('Error fetching listings:', error);
-      res.status(500).json({ error});
+      res.status(500).json({ error });
     });
 });
 
-
-// my listing is not working, nothing is showing even after i add a listing 
-
-// router.get('/mylistings', rejectUnauthenticated, (req, res) => {
+// Fetch user-specific listings
 router.get('/mylistings', rejectUnauthenticated, (req, res) => {
   const queryText = 'SELECT * FROM listings WHERE user_id = $1 ORDER BY created_at DESC;';
   const queryParams = [req.user.id];  
@@ -41,6 +33,7 @@ router.get('/mylistings', rejectUnauthenticated, (req, res) => {
       res.status(500).json({ error: 'Error fetching user listings' });
     });
 });
+
 
 router.post('/', rejectUnauthenticated, (req, res) => {
   console.log('Received stuff for new listing:', req.body);  
