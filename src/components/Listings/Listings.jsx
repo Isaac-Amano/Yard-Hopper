@@ -11,6 +11,11 @@ const Listings = () => {
     dispatch({ type: 'FETCH_ALL_LISTINGS' }); // Fetch all listings when the page loads
   }, [dispatch]);
 
+
+  console.log('Current listings state:', listings); 
+  // this is confirm that listings are being correctly set in the Redux store. 
+
+
   if (!listings) return <div>Loading...</div>;
 
   return (

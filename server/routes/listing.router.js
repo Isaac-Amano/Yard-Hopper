@@ -22,9 +22,7 @@ router.get('/', (req, res) => {
 router.get('/mylistings', rejectUnauthenticated, (req, res) => {
   console.log('User info:', req.user); 
 
-  if (!req.user || !req.user.id) {
-    return res.status(403).json({ error: 'User not authenticated' });
-  }
+  
   const queryText = 'SELECT * FROM listings WHERE user_id = $1 ORDER BY created_at DESC;';
   const queryParams = [req.user.id];  
 

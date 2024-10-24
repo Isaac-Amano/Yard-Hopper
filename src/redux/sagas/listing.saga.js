@@ -61,23 +61,26 @@ function* addListing(action) {
 //  this saga is for the initial listings page to fetch all listings, not working tho
 function* fetchAllListings() {
   try {
-    const response = yield axios.get('/api/listings/')
+    console.log('Fetching all listings'); // Add a log here
+    const response = yield axios.get('/api/listings/');
+    console.log('Listings fetched:', response.data); // Confirm listings are fetched
     yield put({ type: 'SET_LISTINGS', payload: response.data });
-    console.log('Listings fetched:', response.data); 
   } catch (error) {
     console.error('Error fetching all listings:', error);
   }
 }
+
 function* fetchSingleListing(action) {
   try {
-    // error happening below but I don't know
-    console.log('Fetching listing with listing ID:', action.payload);
+    console.log('Fetching single listing with ID:', action.payload); // 
     const response = yield axios.get(`/api/listings/${action.payload}`); // Fetch single listing 
+    console.log('Single listing response:', response.data); 
     yield put({ type: 'SET_SINGLE_LISTING', payload: response.data });  // Store the result in Redux
   } catch (error) {
     console.error('Error fetching single listing:', error);
   }
 }
+
 // Root saga goes below, dont forget to add fetch_singke_listing!!!!
 function* listingsSaga() {
   
