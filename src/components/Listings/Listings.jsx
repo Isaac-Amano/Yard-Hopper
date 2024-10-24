@@ -13,7 +13,7 @@ const Listings = () => {
 
 
   console.log('Current listings state:', listings); 
-  // this is confirm that listings are being correctly set in the Redux store. 
+  // to know the listings are being correctly set in the Redux store. 
 
 
   if (!listings) return <div>Loading...</div>;

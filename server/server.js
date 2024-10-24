@@ -26,7 +26,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/api/user', userRouter);  // User routes
-app.use('/api/image', imageRouter);  // Image upload routes
+// app.use('/api/image', imageRouter);  // Image upload routes
 app.use('/api/listings', listingRouter);  // Listing routes
 
 // Error handling for unexpected paths (optional)
