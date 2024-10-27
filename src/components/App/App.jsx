@@ -13,7 +13,7 @@ import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import Listings from '../Listings/Listings';  // This shows all listings
-import ViewListing from '../ViewListing';  // This is not working
+import ViewListing from '../ViewListing/ViewListing';  // This is not working
 
 import MyListings from '../MyListings/MyListings';
 import AddListing from '../AddListing/AddListing';

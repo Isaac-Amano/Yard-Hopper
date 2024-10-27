@@ -1,18 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 const MyListings = () => {
   const dispatch = useDispatch();
   const userListings = useSelector((state) => state.userListings);  // listings from Redux
   const history = useHistory();
+
+
+  const [message, setMessage] = useState('');
   useEffect(() => {
     
     dispatch({ type: 'FETCH_USER_LISTINGS' });
-  }, [dispatch]);
+  }, []);
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this listing?')){
         dispatch({ type: 'DELETE_LISTING', payload: id });
+
+        setMessage('Listing deleted successfully!');
+      
+        // Clear the message after 3 seconds
+        setTimeout(() => {
+          setMessage('Listing Deleted');  // Clear the message after 0.4 seconds
+        }, 5000);
     }
   };
 

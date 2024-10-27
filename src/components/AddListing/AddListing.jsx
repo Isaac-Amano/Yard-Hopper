@@ -40,7 +40,8 @@ const AddListing = () => {
 
     setTimeout(() => {
       setSuccessMessage('');
-    }, 3000);
+    }, 400);
+    // history.push('/mylistings')
 
   };
 

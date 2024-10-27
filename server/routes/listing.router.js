@@ -17,26 +17,38 @@ router.get('/', (req, res) => {
       res.status(500).json({ error });
     });
 });
-
-// Fetch user-specific listings
-router.get('/mylistings', rejectUnauthenticated, (req, res) => {
-  console.log('User info:', req.user); 
-
-  
-  const queryText = 'SELECT * FROM listings WHERE user_id = $1 ORDER BY created_at DESC;';
-  const queryParams = [req.user.id];  
+router.get('/:id', (req, res) => {
+  const listingId = req.params.id;
+  const queryText = 'SELECT * FROM listings WHERE id = $1;';
+  const queryParams = [listingId];
 
   pool.query(queryText, queryParams)
     .then((result) => {
-      res.status(200).json(result.rows);
-      console.log('User Listings:', result.rows);
+      if (result.rows.length === 0) {
+        return res.sendStatus(404);  
+      }
+      res.json(result.rows[0]);
+    })
+    .catch((error) => {
+      console.error('Error fetching single listing:', error);
+      res.status(500).json({ error: 'Error fetching listing' });
+    });
+});
+// Fetch user-specific listings
+router.get('/mylistings', rejectUnauthenticated, (req, res) => {
+  const queryText = 'SELECT * FROM listings WHERE user_id = $1 ORDER BY created_at DESC;';
+  const queryParams = [req.user.id];  // Make sure req.user.id is correctly passed
+
+  pool.query(queryText, queryParams)
+    .then((result) => {
+      console.log('User listings from database:', result.rows);  // Log the listings from the database
+      res.status(200).json(result.rows);  // Send listings to the frontend
     })
     .catch((error) => {
       console.error('Error fetching user listings:', error);
       res.status(500).json({ error: 'Error fetching user listings' });
     });
 });
-
 
 router.post('/', rejectUnauthenticated, (req, res) => {
   console.log('Received stuff for new listing:', req.body);  

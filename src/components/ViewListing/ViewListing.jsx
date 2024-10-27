@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 const ViewListing = () => {
   const { id } = useParams(); // Get the listing ID from the URL
   const dispatch = useDispatch();
-  const listing = useSelector(state => state.currentListing); // Replace with your actual state slice
+  const listing = useSelector((state) => state.listings.currentListing); // Replace with your actual state slice
 
   useEffect(() => {
     if (id) {
@@ -13,15 +13,14 @@ const ViewListing = () => {
     }
   }, [dispatch, id]);
 
-  if (!listing) return <div>Loading...</div>; // Loading state while data is being fetched
+  if (!listing) return <div>Please wait</div>; 
 
   return (
     <div>
       <h2>{listing.title}</h2>
       <p>{listing.description}</p>
       <p>Location: {listing.city}, {listing.state}</p>
-      {/* will add additional info/}
-      {/* will add maps */}
+      {/* Additional details about the listing */}
     </div>
   );
 };

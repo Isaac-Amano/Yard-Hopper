@@ -29,7 +29,7 @@ app.use('/api/user', userRouter);  // User routes
 // app.use('/api/image', imageRouter);  // Image upload routes
 app.use('/api/listings', listingRouter);  // Listing routes
 
-// Error handling for unexpected paths (optional)
+
 app.use((req, res, next) => {
   const error = new Error('Not Found');
   error.status = 404;

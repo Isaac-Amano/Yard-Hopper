@@ -20,6 +20,15 @@ function* fetchSingleListing(action) {
     console.error('Error fetching single listing:', error);
   }
 }
+function* fetchUserListings() {
+  try {
+    const response = yield axios.get('/api/listings/mylistings');  // API call to fetch user's listings
+    
+    yield put({ type: 'SET_USER_LISTINGS', payload: response.data });  // Dispatch to set user listings in Redux
+  } catch (error) {
+    console.error('Error fetching user listings:', error);
+  }
+}
 
 // Saga to handle adding a new listing
 function* addListing(action) {
@@ -45,13 +54,16 @@ function* updateListing(action) {
 // Saga to handle deleting a listing
 function* deleteListing(action) {
   try {
-    const listingId = action.payload;  // Extract listing ID
-    yield axios.delete(`/api/listings/${listingId}`);  // Delete listing by ID
-    yield put({ type: 'FETCH_ALL_LISTINGS' });  // Refresh all listings after deleting
+    const listingId = action.payload;
+    yield axios.delete(`/api/listings/${listingId}`);  // API call to delete the listing
+
+    // After successful deletion, fetch the updated list of user's listings
+    yield put({ type: 'FETCH_USER_LISTINGS' });
   } catch (error) {
     console.error('Error deleting listing:', error);
   }
 }
+
 
 // Root saga
 function* listingsSaga() {
@@ -60,6 +72,8 @@ function* listingsSaga() {
   yield takeLatest('ADD_LISTING', addListing);  // Watcher saga for adding a listing
   yield takeLatest('UPDATE_LISTING', updateListing);  // Watcher saga for updating a listing
   yield takeLatest('DELETE_LISTING', deleteListing);  // Watcher saga for deleting a listing
+  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListings);
+
 }
 
 export default listingsSaga;
