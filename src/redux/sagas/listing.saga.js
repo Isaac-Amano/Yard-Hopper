@@ -15,14 +15,15 @@ function* fetchAllListings(action) {
 // Saga to handle fetching a single listing
 function* fetchSingleListing(action) {
   try {
-    console.log("Fetching listing with ID:", action.payload);
+    console.log("Fetching listing with ID:", action.payload); // Check if the action is dispatched
     const response = yield axios.get(`/api/listings/${action.payload}`);
-    console.log("Fetched single listing data:", response.data);
+    console.log("Fetched single listing data:", response.data); // Check the API response
     yield put({ type: 'SET_SINGLE_LISTING', payload: response.data });
   } catch (error) {
     console.error('Error fetching single listing:', error);
   }
 }
+
 
 // Saga to handle fetching user's specific listings
 function* fetchUserListing() {
