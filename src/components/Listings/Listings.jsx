@@ -1,30 +1,39 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom'; //for nav
+import { Link } from 'react-router-dom';
 
 const Listings = () => {
   const dispatch = useDispatch();
-
-  const listings = useSelector(state => state.listings); // Get all listings from Redux
+  const listings = useSelector((state) => state.listings);
+  const [searchTerm, setSearchTerm] = useState(''); // State for the search term
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_ALL_LISTINGS' }); // Fetch all listings when the page loads
-  }, []);
+    dispatch({ type: 'FETCH_ALL_LISTINGS' }); // Fetch all listings initially
+  }, [dispatch]);
 
-
-  console.log('Current listings ', listings); 
-  // to know the listings are being correctly set in the Redux store. 
+  const handleSearch = () => {
+    dispatch({ type: 'FETCH_ALL_LISTINGS', payload: searchTerm }); // Dispatch search term
+  };
 
   return (
     <div>
       <h2>All Listings</h2>
+
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search by description, city, or state"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <button onClick={handleSearch}>Search</button>
+
       <div className="listing-grid">
         {listings.length > 0 ? (
           listings.map((listing) => (
             <div key={listing.id} className="listing-card">
               <h3>{listing.title}</h3>
               <p>{listing.description}</p>
-              {/* Link to individual listing's detail page */}
               <Link to={`/listings/${listing.id}`}>View Details</Link>
             </div>
           ))
