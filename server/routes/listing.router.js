@@ -3,20 +3,34 @@ const router = express.Router();
 const pool = require('../modules/pool'); 
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
-// Fetch all listings
+// Fetch all listings with optional search filtering
 router.get('/', (req, res) => {
-  const queryText = 'SELECT * FROM listings ORDER BY created_at DESC;';
-  
-  pool.query(queryText)
+  const search = req.query.search || ''; // Get the search term from query parameters, default to empty
+
+  let queryText = 'SELECT * FROM listings';
+  let queryParams = [];
+
+  if (search) {
+    // Add filtering conditions if a search term is provided
+    queryText += ` WHERE description ILIKE $1 OR city ILIKE $1 OR state ILIKE $1 ORDER BY created_at DESC`;
+    queryParams.push(`%${search}%`);
+  } else {
+    // Default query without filtering
+    queryText += ' ORDER BY created_at DESC';
+  }
+
+  pool.query(queryText, queryParams)
     .then((result) => {
       res.status(200).json(result.rows); 
-      console.log('All Listings:', result.rows);
+      console.log('Filtered Listings:', result.rows);
     })
     .catch((error) => {
       console.error('Error fetching listings:', error);
       res.status(500).json({ error });
     });
 });
+
+// Fetch a single listing by ID
 router.get('/:id', (req, res) => {
   const listingId = req.params.id;
   const queryText = 'SELECT * FROM listings WHERE id = $1;';
@@ -34,10 +48,11 @@ router.get('/:id', (req, res) => {
       res.status(500).json({ error: 'Error fetching listing' });
     });
 });
+
 // Fetch user-specific listings
 router.get('/mylistings', rejectUnauthenticated, (req, res) => {
   const queryText = 'SELECT * FROM listings WHERE user_id = $1 ORDER BY created_at DESC;';
-  const queryParams = [req.user.id];  // Make sure req.user.id is correctly passed
+  const queryParams = [req.user.id];  // Ensure req.user.id is correctly passed
 
   pool.query(queryText, queryParams)
     .then((result) => {
@@ -50,33 +65,17 @@ router.get('/mylistings', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// Create a new listing
 router.post('/', rejectUnauthenticated, (req, res) => {
   console.log('Received stuff for new listing:', req.body);  
 
-  
-  const { title, description, 
-    image_url_1, 
-    image_url_2, 
-    image_url_3, 
-    phone_number, 
-    address, 
-    city,
-    state } = req.body;
+  const { title, description, image_url_1, image_url_2, image_url_3, phone_number, address, city, state } = req.body;
   const user_id = req.user.id;  
   const queryText = `
     INSERT INTO listings (title, description, image_url_1, image_url_2, image_url_3, phone_number, address, city, state, user_id)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *;
   `;
-  const queryParams = [title,
-     description,
-      image_url_1, 
-      image_url_2, 
-      image_url_3, 
-      phone_number, 
-      address, 
-      city,
-      state,
-      user_id];
+  const queryParams = [title, description, image_url_1, image_url_2, image_url_3, phone_number, address, city, state, user_id];
 
   pool.query(queryText, queryParams)
     .then(result => res.json(result.rows[0]))
@@ -86,6 +85,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// Delete a listing by ID
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const listingId = req.params.id;
   const userId = req.user.id; 
@@ -96,7 +96,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
   pool.query(queryText, queryParams)
   .then((result) => {
     if (result.rowCount === 0) {
-      console.log('nothing found to delete');
+      console.log('Nothing found to delete');
       return res.sendStatus(404);
     }
     console.log('Listing deleted:', result.rowCount);
@@ -108,6 +108,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
   });
 });
 
+// Update a listing by ID
 router.put('/:id', rejectUnauthenticated, (req, res) => {
   const listingId = req.params.id;
   const userId = req.user.id;  
@@ -135,7 +136,5 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
-
-
 
 module.exports = router;
