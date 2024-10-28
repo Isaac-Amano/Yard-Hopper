@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
   let queryParams = [];
 
   if (search) {
-    // Add filtering conditions if a search term is provided
+    // Add filtering conditions 
     queryText += ` WHERE description ILIKE $1 OR city ILIKE $1 OR state ILIKE $1 ORDER BY created_at DESC`;
     queryParams.push(`%${search}%`);
   } else {
@@ -51,19 +51,27 @@ router.get('/:id', (req, res) => {
 
 // Fetch user-specific listings
 router.get('/mylistings', rejectUnauthenticated, (req, res) => {
+  if (!req.user || !req.user.id) {
+    console.error('User is not authenticated or req.user.id is missing');
+    return res.status(500).json({ error: 'User not authenticated' });
+  }
+
   const queryText = 'SELECT * FROM listings WHERE user_id = $1 ORDER BY created_at DESC;';
-  const queryParams = [req.user.id];  // Ensure req.user.id is correctly passed
+  const queryParams = [req.user.id]; 
 
   pool.query(queryText, queryParams)
     .then((result) => {
-      console.log('User listings from database:', result.rows);  // Log the listings from the database
-      res.status(200).json(result.rows);  // Send listings to the frontend
+      console.log('User listings:', result.rows);
+      res.status(200).json(result.rows);
     })
     .catch((error) => {
       console.error('Error fetching user listings:', error);
-      res.status(500).json({ error: 'Error fetching user listings' });
+      res.status(500).json({ error });
     });
 });
+
+
+
 
 // Create a new listing
 router.post('/', rejectUnauthenticated, (req, res) => {
@@ -108,7 +116,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
   });
 });
 
-// Update a listing by ID
+// Update a listing
 router.put('/:id', rejectUnauthenticated, (req, res) => {
   const listingId = req.params.id;
   const userId = req.user.id;  

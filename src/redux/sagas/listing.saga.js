@@ -25,7 +25,7 @@ function* fetchSingleListing(action) {
 }
 
 // Saga to handle fetching user's specific listings
-function* fetchUserListings() {
+function* fetchUserListing() {
   try {
     const response = yield axios.get('/api/listings/mylistings');  // API call to fetch user's listings
     yield put({ type: 'SET_USER_LISTINGS', payload: response.data });  // Dispatch to set user listings in Redux
@@ -33,6 +33,7 @@ function* fetchUserListings() {
     console.error('Error fetching user listings:', error);
   }
 }
+
 
 // Saga to handle adding a new listing
 function* addListing(action) {
@@ -73,7 +74,7 @@ function* listingsSaga() {
   yield takeLatest('ADD_LISTING', addListing);  // Watcher saga for adding a listing
   yield takeLatest('UPDATE_LISTING', updateListing);  // Watcher saga for updating a listing
   yield takeLatest('DELETE_LISTING', deleteListing);  // Watcher saga for deleting a listing
-  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListings);  // Watcher saga for fetching user-specific listings
+  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListing);  // Watcher saga for fetching user-specific listings
 }
 
 export default listingsSaga;
