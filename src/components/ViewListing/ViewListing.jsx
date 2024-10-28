@@ -3,15 +3,17 @@ import { useSelector } from 'react-redux';
 import GoogleMapReact from 'google-map-react';
 
 const ViewListing = () => {
-  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY; // Updated to use Vite-compatible environment variable
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY; // Vite environment variable
   const listing = useSelector((state) => state.currentListing);
   const [coordinates, setCoordinates] = useState(null);
   const [showContact, setShowContact] = useState(false);
 
   useEffect(() => {
     const geocodeAddress = async () => {
-      if (listing) {
+      if (listing && listing.address && listing.city && listing.state) {
         const address = `${listing.address}, ${listing.city}, ${listing.state}`;
+        console.log("Address used for geocoding:", address); // Debugging line
+
         try {
           const response = await fetch(
             `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
@@ -30,6 +32,10 @@ const ViewListing = () => {
         } catch (error) {
           console.error('Error fetching coordinates:', error);
         }
+      } else {
+        console.warn('Listing address is incomplete or missing.');
+        // Optionally set a default location (example coordinates for NYC)
+        setCoordinates({ lat: 40.7128, lng: -74.0060 });
       }
     };
     geocodeAddress();
