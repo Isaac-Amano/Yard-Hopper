@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 const ViewListing = () => {
   const { id } = useParams();  // Get the listing ID from the URL
   const dispatch = useDispatch();
-  const listing = useSelector((state) => state.currentListing);  // Access the single listing from Redux state
+  const listing = useSelector((state) => state.listings.currentListing);
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);  // State to toggle phone number display
 
   useEffect(() => {

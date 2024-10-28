@@ -15,8 +15,10 @@ function* fetchAllListings(action) {
 // Saga to handle fetching a single listing
 function* fetchSingleListing(action) {
   try {
-    const response = yield axios.get(`/api/listings/${action.payload}`);  // Fetch single listing by ID
-    yield put({ type: 'SET_SINGLE_LISTING', payload: response.data });  // Dispatch action to set the single listing in Redux state
+    console.log("Fetching listing with ID:", action.payload);
+    const response = yield axios.get(`/api/listings/${action.payload}`);
+    console.log("Fetched single listing data:", response.data);
+    yield put({ type: 'SET_SINGLE_LISTING', payload: response.data });
   } catch (error) {
     console.error('Error fetching single listing:', error);
   }
