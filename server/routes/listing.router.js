@@ -50,7 +50,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Fetch user-specific listings
-router.get('/mylistings', rejectUnauthenticated, (req, res) => {
+router.get('/listings/mylistings', rejectUnauthenticated, (req, res) => {
   if (!req.user || !req.user.id) {
     console.error('User is not authenticated or req.user.id is missing');
     return res.status(500).json({ error: 'User not authenticated' });
