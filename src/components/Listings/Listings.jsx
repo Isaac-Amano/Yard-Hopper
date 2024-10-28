@@ -15,6 +15,12 @@ const Listings = () => {
     dispatch({ type: 'FETCH_ALL_LISTINGS', payload: searchTerm }); // Dispatch search term
   };
 
+  // Clear search function
+  const clearSearch = () => {
+    setSearchTerm(''); // Reset search term
+    dispatch({ type: 'FETCH_ALL_LISTINGS' }); // Fetch all listings without any filter
+  };
+
   return (
     <div>
       <h2>All Listings</h2>
@@ -27,6 +33,7 @@ const Listings = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <button onClick={handleSearch}>Search</button>
+      <button onClick={clearSearch}>Clear</button> {/* Clear search button */}
 
       <div className="listing-grid">
         {listings.length > 0 ? (

@@ -1,10 +1,11 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-// Saga to handle fetching all listings
-function* fetchAllListings() {
+// Saga to handle fetching all listings with optional search term
+function* fetchAllListings(action) {
   try {
-    const response = yield axios.get('/api/listings');  // Fetch all listings
+    const searchTerm = action.payload || '';  // Extract search term if provided
+    const response = yield axios.get(`/api/listings?search=${searchTerm}`);  // Fetch all listings with search term
     yield put({ type: 'SET_LISTINGS', payload: response.data });  // Dispatch action to set all listings in Redux state
   } catch (error) {
     console.error('Error fetching all listings:', error);
@@ -20,10 +21,11 @@ function* fetchSingleListing(action) {
     console.error('Error fetching single listing:', error);
   }
 }
+
+// Saga to handle fetching user's specific listings
 function* fetchUserListings() {
   try {
     const response = yield axios.get('/api/listings/mylistings');  // API call to fetch user's listings
-    
     yield put({ type: 'SET_USER_LISTINGS', payload: response.data });  // Dispatch to set user listings in Redux
   } catch (error) {
     console.error('Error fetching user listings:', error);
@@ -56,14 +58,11 @@ function* deleteListing(action) {
   try {
     const listingId = action.payload;
     yield axios.delete(`/api/listings/${listingId}`);  // API call to delete the listing
-
-    // After successful deletion, fetch the updated list of user's listings
-    yield put({ type: 'FETCH_USER_LISTINGS' });
+    yield put({ type: 'FETCH_USER_LISTINGS' });  // Fetch updated list of user's listings after deletion
   } catch (error) {
     console.error('Error deleting listing:', error);
   }
 }
-
 
 // Root saga
 function* listingsSaga() {
@@ -72,8 +71,7 @@ function* listingsSaga() {
   yield takeLatest('ADD_LISTING', addListing);  // Watcher saga for adding a listing
   yield takeLatest('UPDATE_LISTING', updateListing);  // Watcher saga for updating a listing
   yield takeLatest('DELETE_LISTING', deleteListing);  // Watcher saga for deleting a listing
-  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListings);
-
+  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListings);  // Watcher saga for fetching user-specific listings
 }
 
 export default listingsSaga;
