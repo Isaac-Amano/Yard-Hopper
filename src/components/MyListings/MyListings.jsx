@@ -13,13 +13,20 @@ const MyListings = () => {
     dispatch({ type: 'FETCH_USER_LISTINGS' });
   }, []);
 
+  console.log('user liting is:' , userListings);
+
+
+
+
+
+  
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this listing?')) {
       dispatch({ type: 'DELETE_LISTING', payload: id });
 
       setMessage('Listing deleted successfully!');
       
-      // Clear the message after 3 seconds
+      // delete the message that popped up in 3 sec
       setTimeout(() => {
         setMessage('');  
       }, 3000);

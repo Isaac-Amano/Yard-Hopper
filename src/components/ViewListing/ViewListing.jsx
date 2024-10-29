@@ -31,13 +31,16 @@ const ViewListing = () => {
               address
             )}&key=${GOOGLE_MAPS_API_KEY}`
           );
+
           const data = await response.json();
           console.log("Geocode response:", data);
 
           if (data.results.length > 0) {
             const location = data.results[0].geometry.location;
             setCoordinates({ lat: location.lat, lng: location.lng });
+
           } else {
+
             console.error('Geocoding failed: No results found');
           }
         } catch (error) {
@@ -58,7 +61,7 @@ const ViewListing = () => {
       <h2>{listing.title || "No Title Available"}</h2>
       <p>{listing.description || "No Description Available"}</p>
       <p>
-        Location: {listing.city || "City not provided"}, {listing.state || "State not provided"}
+        Location: {listing.address || "Address not provided"}, {listing.city || "City not provided"}, {listing.state || "State not provided"}
       </p>
 
       {/* Contact Seller Button */}
@@ -88,4 +91,3 @@ const ViewListing = () => {
 };
 
 export default ViewListing;
-
