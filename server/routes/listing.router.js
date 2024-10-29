@@ -51,13 +51,9 @@ router.get('/:id', (req, res) => {
 
 // Fetch user-specific listings
 // ISSUE IS HERE
-
-
-
-
 router.get('/mylistings', rejectUnauthenticated, (req, res) => {
   if (!req.user || !req.user.id) {
-    console.error('User is not authenticated or req.user.id is missing');
+    console.error('error is here');
     return res.status(500).json({ error: 'User not authenticated' });
   }
 
@@ -71,14 +67,9 @@ router.get('/mylistings', rejectUnauthenticated, (req, res) => {
     })
     .catch((error) => {
       console.error('Error fetching user listings:', error);
-      res.status(500).json({ error });
+      res.status(500).json({ error: 'issue is here' });
     });
 });
-
-
-
-
-
 
 
 // Create a new listing

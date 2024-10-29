@@ -25,7 +25,9 @@ function* fetchSingleListing(action) {
 
 
 
-// Saga to handle fetching user's specific listings
+// Saga to handle fetching Mylistings
+//  ISSUE IS HERE 
+
 function* fetchUserListing() {
   try {
     const response = yield axios.get('/api/listings/mylistings');  // API call to fetch user's listings
@@ -72,11 +74,11 @@ function* deleteListing(action) {
 // Root saga
 function* listingsSaga() {
   yield takeLatest('FETCH_ALL_LISTINGS', fetchAllListings);  // Watcher saga for fetching all listings
-  yield takeLatest('FETCH_SINGLE_LISTING', fetchSingleListing);  // Watcher saga for fetching single listing
-  yield takeLatest('ADD_LISTING', addListing);  // Watcher saga for adding a listing
-  yield takeLatest('UPDATE_LISTING', updateListing);  // Watcher saga for updating a listing
-  yield takeLatest('DELETE_LISTING', deleteListing);  // Watcher saga for deleting a listing
-  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListing);  // Watcher saga for fetching user-specific listings
+  yield takeLatest('FETCH_SINGLE_LISTING', fetchSingleListing);  //'' for fetching single listing
+  yield takeLatest('ADD_LISTING', addListing);  // for adding a listing
+  yield takeLatest('UPDATE_LISTING', updateListing);  //  for updating a listing
+  yield takeLatest('DELETE_LISTING', deleteListing);  //  for deleting a listing
+  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListing);  // Watcher saga for fetching user-specific listings but its not working 
 }
 
 export default listingsSaga;
