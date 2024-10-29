@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
+import { useLoadScript, Autocomplete } from "@react-google-maps/api";
+
+const libraries = ["places"];
 
 const EditListing = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();  // Get the listing ID from the URL
+  const { id } = useParams(); // Get the listing ID from the URL
   const history = useHistory();
 
   const listings = useSelector((state) => state.userListings);
-  const listingToEdit = listings.find(listing => listing.id === Number(id));
+  const listingToEdit = listings.find((listing) => listing.id === Number(id));
 
   const [formData, setFormData] = useState({
     title: '',
@@ -16,11 +19,17 @@ const EditListing = () => {
     phone_number: '',
     address: '',
     city: '',
-    state: ''
+    state: '',
+  });
+
+  const autocompleteRef = useRef(null);
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries,
   });
 
   useEffect(() => {
-    console.log('Listing to edit:', listingToEdit)
     if (listingToEdit) {
       setFormData({
         title: listingToEdit.title,
@@ -28,10 +37,22 @@ const EditListing = () => {
         phone_number: listingToEdit.phone_number,
         address: listingToEdit.address,
         city: listingToEdit.city,
-        state: listingToEdit.state
+        state: listingToEdit.state,
       });
     }
   }, [listingToEdit]);
+
+  const handlePlaceChanged = () => {
+    const place = autocompleteRef.current.getPlace();
+    if (place) {
+      setFormData({
+        ...formData,
+        address: place.formatted_address || "",
+        city: place.address_components.find((comp) => comp.types.includes("locality"))?.long_name || '',
+        state: place.address_components.find((comp) => comp.types.includes("administrative_area_level_1"))?.short_name || '',
+      });
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -43,17 +64,14 @@ const EditListing = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    console.log('data coming from:', { id, ...formData });
-    // Send updated listing data to the saga
     dispatch({
       type: 'UPDATE_LISTING',
-      payload: { id, ...formData }
+      payload: { id, ...formData },
     });
-
-    // Redirect to my listings page after successful edit
     history.push('/mylistings');
   };
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <div>
@@ -83,14 +101,19 @@ const EditListing = () => {
           placeholder="Phone Number"
           required
         />
-        <input
-          type="text"
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-          placeholder="Address"
-          required
-        />
+        <Autocomplete
+          onLoad={(autocomplete) => (autocompleteRef.current = autocomplete)}
+          onPlaceChanged={handlePlaceChanged}
+        >
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            placeholder="Address"
+            required
+          />
+        </Autocomplete>
         <input
           type="text"
           name="city"
