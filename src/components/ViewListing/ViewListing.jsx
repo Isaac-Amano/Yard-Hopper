@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import GoogleMapReact from 'google-map-react';
 
 const ViewListing = () => {
-  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY; // Vite environment variable
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const listing = useSelector((state) => state.currentListing);
   const [coordinates, setCoordinates] = useState(null);
   const [showContact, setShowContact] = useState(false);
 
+  // Dispatch action to fetch the specific listing by ID
+  useEffect(() => {
+    if (id) {
+      dispatch({ type: 'FETCH_SINGLE_LISTING', payload: id });
+    }
+  }, [dispatch, id]);
+
+  // Geocode the listing address when the listing data is available
   useEffect(() => {
     const geocodeAddress = async () => {
       if (listing && listing.address && listing.city && listing.state) {
         const address = `${listing.address}, ${listing.city}, ${listing.state}`;
-        console.log("Address used for geocoding:", address); // Debugging line
+        console.log("Address used for geocoding:", address);
 
         try {
           const response = await fetch(
@@ -21,7 +32,7 @@ const ViewListing = () => {
             )}&key=${GOOGLE_MAPS_API_KEY}`
           );
           const data = await response.json();
-          console.log("Geocode response:", data); // Debugging line
+          console.log("Geocode response:", data);
 
           if (data.results.length > 0) {
             const location = data.results[0].geometry.location;
@@ -34,35 +45,37 @@ const ViewListing = () => {
         }
       } else {
         console.warn('Listing address is incomplete or missing.');
-        // Optionally set a default location (example coordinates for NYC)
-        setCoordinates({ lat: 40.7128, lng: -74.0060 });
       }
     };
+
     geocodeAddress();
-  }, [listing, GOOGLE_MAPS_API_KEY]); // Ensure the key is part of the dependency array
+  }, [listing, GOOGLE_MAPS_API_KEY]);
 
   if (!listing) return <div>Loading listing...</div>;
 
   return (
     <div>
-      <h2>{listing.title}</h2>
-      <p>{listing.description}</p>
-      <p>Location: {listing.city}, {listing.state}</p>
+      <h2>{listing.title || "No Title Available"}</h2>
+      <p>{listing.description || "No Description Available"}</p>
+      <p>
+        Location: {listing.city || "City not provided"}, {listing.state || "State not provided"}
+      </p>
 
       {/* Contact Seller Button */}
       <button onClick={() => setShowContact(!showContact)}>
         {showContact ? 'Hide Contact Info' : 'Contact Seller'}
       </button>
-      {showContact && <p>Phone: {listing.phone_number}</p>}
+      {showContact && <p>Phone: {listing.phone_number || "Phone number not available"}</p>}
 
       <div style={{ height: '400px', width: '100%' }}>
         {coordinates ? (
           <GoogleMapReact
             bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
-            center={coordinates}
-            defaultZoom={10}
+            center={coordinates} // Ensure the map centers on the coordinates
+            defaultZoom={15} // Adjust zoom for better focus on the exact location
           >
-            <div lat={coordinates.lat} lng={coordinates.lng}>
+            {/* Marker */}
+            <div lat={coordinates.lat} lng={coordinates.lng} style={{ color: 'red', fontSize: '24px' }}>
               📍
             </div>
           </GoogleMapReact>
@@ -75,3 +88,4 @@ const ViewListing = () => {
 };
 
 export default ViewListing;
+
