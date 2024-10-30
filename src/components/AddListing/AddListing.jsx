@@ -19,7 +19,7 @@ const AddListing = () => {
   const autocompleteRef = useRef(null);
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Updated to Vite-compatible variable
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Updated 
     libraries,
   });
 

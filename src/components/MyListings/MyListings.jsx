@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
-const MyListings = () => {
+
+const MyListings = () => {  
+  // const { id } = useParams();
   const dispatch = useDispatch();
+ 
   const userListings = useSelector((state) => state.userListings);  
   const history = useHistory();
 
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_USER_LISTINGS' });
+    dispatch({ type: 'FETCH_USER_LISTINGS'});
   }, []);
-
+  // dispatch({ type: 'FETCH_USER_LISTINGS', payload: id });
+  // [dispatch, id]);
   console.log('user liting is:' , userListings);
 
 
