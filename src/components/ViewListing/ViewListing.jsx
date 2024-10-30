@@ -16,6 +16,7 @@ const ViewListing = () => {
     if (id) {
       dispatch({ type: 'FETCH_SINGLE_LISTING', payload: id });
     }
+    console.log('in view use effect');
   }, [dispatch, id]);
 
   // Geocode the listing address when the listing data is available

@@ -18,7 +18,7 @@ const MyListings = () => {
   }, []);
   // dispatch({ type: 'FETCH_USER_LISTINGS', payload: id });
   // [dispatch, id]);
-  console.log('user liting is:' , userListings);
+  console.log('user listing is:' , userListings);
 
 
 

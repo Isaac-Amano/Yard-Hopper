@@ -16,10 +16,10 @@ function* fetchAllListings(action) {
 function* fetchSingleListing(action) {
   console.log("Fetching listing with ID:", action.payload); // Debugging line
   try {
-    const response = yield axios.get(`/api/listings/${action.payload}`);
+    const response = yield axios.get(`/api/listings/getbyid/${action.payload}`);
     yield put({ type: 'SET_SINGLE_LISTING', payload: response.data });
   } catch (error) {
-    console.error('Error fetching single listing:', error);
+    console.error('Error fetching single listing on saga:', error);
   }
 }
 
@@ -29,12 +29,13 @@ function* fetchSingleListing(action) {
 //  ISSUE IS HERE 
 
 function* fetchUserListing() {
+  console.log('in user listing');
   try {
     const response = yield axios.get('/api/listings/mylistings');  // API call to fetch user's listings
     // issue with route may be here???
     yield put({ type: 'SET_USER_LISTINGS', payload: response.data });  // Dispatch to set user listings in Redux
   } catch (error) {
-    console.error('Error fetching user listings:', error);
+    console.error('Error fetching user listings in saga :', error);
   }
 }
 
@@ -52,7 +53,7 @@ function* addListing(action) {
 // Saga to handle updating a listing
 function* updateListing(action) {
   try {
-    const { id, ...updatedListing } = action.payload;  // Extract the listing ID and the updated listing data
+    const { id, ...updatedListing } = action.payload;  // get the listing ID and the updated listing data
     yield axios.put(`/api/listings/${id}`, updatedListing);  // Update listing by ID
     yield put({ type: 'FETCH_ALL_LISTINGS' });  // Refresh all listings after updating
   } catch (error) {

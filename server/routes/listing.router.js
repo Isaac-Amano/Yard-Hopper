@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
 });
 
 // Fetch a single listing by ID
-router.get('/:id', (req, res) => {
+router.get('/getbyid/:id', (req, res) => {
   const listingId = req.params.id;
   const queryText = 'SELECT * FROM listings WHERE id = $1;';
   const queryParams = [listingId];
