@@ -41,6 +41,18 @@ const Listings = () => {
             <div key={listing.id} className="listing-card">
               <h3>{listing.title}</h3>
               <p>{listing.description}</p>
+              
+              {/* Display up to three images if they exist */}
+              {listing.image_url_1 && (
+                <img src={listing.image_url_1} alt="Listing Image 1" style={{ width: '100px', margin: '5px' }} />
+              )}
+              {listing.image_url_2 && (
+                <img src={listing.image_url_2} alt="Listing Image 2" style={{ width: '100px', margin: '5px' }} />
+              )}
+              {listing.image_url_3 && (
+                <img src={listing.image_url_3} alt="Listing Image 3" style={{ width: '100px', margin: '5px' }} />
+              )}
+              
               <Link to={`/listings/${listing.id}`}>View Details</Link>
             </div>
           ))

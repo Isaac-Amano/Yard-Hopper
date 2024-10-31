@@ -13,24 +13,30 @@ const ImageUpload = () => {
   // Handle form submission (image upload)
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
+    if (!selectedFile) {
+      console.error('No file selected');
+      return;
+    }
+  
     const formData = new FormData();
     formData.append('image', selectedFile);
-
+  
     try {
+      console.log('Uploading image...');
       const response = await axios.post('/api/image/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      // Set the returned Cloudinary URL
-      setImageUrl(response.data.imageUrl);
+      console.log('Response from server:', response.data);
+  
+      setImageUrl(response.data.url || response.data.imageUrl);  // Ensure this matches server response
     } catch (error) {
       console.error('Error uploading image:', error);
     }
   };
-
+  
   return (
     <div>
       <h2>Upload an Image</h2>
