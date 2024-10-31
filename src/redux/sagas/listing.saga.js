@@ -1,7 +1,7 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-// Saga to handle fetching all listings with optional search term
+// Saga to handle fetching all listings with an optional search term
 function* fetchAllListings(action) {
   try {
     const searchTerm = action.payload || '';  // Extract search term if provided
@@ -12,9 +12,9 @@ function* fetchAllListings(action) {
   }
 }
 
-// Saga to handle fetching a single listing
+// Saga to handle fetching a single listing by ID
 function* fetchSingleListing(action) {
-  console.log("Fetching listing with ID:", action.payload); // Debugging line
+  console.log("Fetching listing with ID:", action.payload);  // Debugging line
   try {
     const response = yield axios.get(`/api/listings/getbyid/${action.payload}`);
     yield put({ type: 'SET_SINGLE_LISTING', payload: response.data });
@@ -23,22 +23,16 @@ function* fetchSingleListing(action) {
   }
 }
 
-
-
-// Saga to handle fetching Mylistings
-//  ISSUE IS HERE 
-
+// Saga to handle fetching user-specific listings
 function* fetchUserListing() {
-  console.log('in user listing');
+  console.log('Fetching user-specific listings');
   try {
     const response = yield axios.get('/api/listings/mylistings');  // API call to fetch user's listings
-    // issue with route may be here???
     yield put({ type: 'SET_USER_LISTINGS', payload: response.data });  // Dispatch to set user listings in Redux
   } catch (error) {
-    console.error('Error fetching user listings in saga :', error);
+    console.error('Error fetching user listings in saga:', error);
   }
 }
-
 
 // Saga to handle adding a new listing
 function* addListing(action) {
@@ -51,11 +45,16 @@ function* addListing(action) {
 }
 
 // Saga to handle updating a listing
+// *************
+// The payload for UPDATE_LISTING action in EditListing.jsx is not properly populated with the listing data. this is my issue **********
+
 function* updateListing(action) {
   try {
-    const { id, ...updatedListing } = action.payload;  // get the listing ID and the updated listing data
-    yield axios.put(`/api/listings/${id}`, updatedListing);  // Update listing by ID
-    yield put({ type: 'FETCH_ALL_LISTINGS' });  // Refresh all listings after updating
+    const { id, ...updatedListing } = action.payload;  // 
+    console.log("Updating listing with ID:", id);  
+    console.log("Updated Listing Payload:", updatedListing); 
+    yield axios.put(`/api/listings/${id}`, updatedListing); 
+    yield put({ type: 'FETCH_ALL_LISTING' });  // this is the issue 
   } catch (error) {
     console.error('Error updating listing:', error);
   }
@@ -72,14 +71,14 @@ function* deleteListing(action) {
   }
 }
 
-// Root saga
+// Root saga to watch for listing-related actions
 function* listingsSaga() {
-  yield takeLatest('FETCH_ALL_LISTINGS', fetchAllListings);  // Watcher saga for fetching all listings
-  yield takeLatest('FETCH_SINGLE_LISTING', fetchSingleListing);  //'' for fetching single listing
-  yield takeLatest('ADD_LISTING', addListing);  // for adding a listing
-  yield takeLatest('UPDATE_LISTING', updateListing);  //  for updating a listing
-  yield takeLatest('DELETE_LISTING', deleteListing);  //  for deleting a listing
-  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListing);  // Watcher saga for fetching user-specific listings but its not working 
+  yield takeLatest('FETCH_ALL_LISTINGS', fetchAllListings);  // Watch for fetching all listings
+  yield takeLatest('FETCH_SINGLE_LISTING', fetchSingleListing);  // Watch for fetching a single listing by ID
+  yield takeLatest('ADD_LISTING', addListing);  // Watch for adding a new listing
+  yield takeLatest('UPDATE_LISTING', updateListing);  // Watch for updating a listing
+  yield takeLatest('DELETE_LISTING', deleteListing);  // Watch for deleting a listing
+  yield takeLatest('FETCH_USER_LISTINGS', fetchUserListing);  // Watch for fetching user-specific listings
 }
 
 export default listingsSaga;

@@ -128,30 +128,36 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
 // Update a listing
 router.put('/:id', rejectUnauthenticated, (req, res) => {
   const listingId = req.params.id;
-  const userId = req.user.id;  
+  const userId = req.user.id;
 
-  const { title, description, phone_number, address, city, state } = req.body;
+  const { title, description, phone_number, address, city, state, image_url_1, image_url_2, image_url_3 } = req.body;
+
+  console.log("Updating Listing ID:", listingId);     
+  console.log("User ID:", userId);                  
+  console.log("Request Body:", req.body);            
 
   const queryText = `
     UPDATE listings 
-    SET title = $1, description = $2, phone_number = $3, address = $4, city = $5, state = $6
-    WHERE id = $7 AND user_id = $8
+    SET title = $1, description = $2, phone_number = $3, address = $4, city = $5, state = $6, 
+        image_url_1 = $7, image_url_2 = $8, image_url_3 = $9
+    WHERE id = $10 AND user_id = $11
     RETURNING *;
   `;
-  const queryParams = [title, description, phone_number, address, city, state, listingId, userId];
+  const queryParams = [title, description, phone_number, address, city, state, image_url_1, image_url_2, image_url_3, listingId, userId];
 
   pool.query(queryText, queryParams)
     .then((result) => {
       if (result.rowCount === 0) {
-        res.sendStatus(404); 
-      } else {
-        res.json(result.rows[0]);
+        console.log("No rows updated - likely incorrect ID or user ID");
+        return res.sendStatus(404);
       }
+      res.json(result.rows[0]);
     })
     .catch((error) => {
       console.error('Error updating listing:', error);
-      res.sendStatus(500);
+      res.sendStatus(500); 
     });
 });
+
 
 module.exports = router;
