@@ -16,7 +16,6 @@ const ViewListing = () => {
     if (id) {
       dispatch({ type: 'FETCH_SINGLE_LISTING', payload: id });
     }
-    console.log('in view use effect');
   }, [dispatch, id]);
 
   // Geocode the listing address when the listing data is available
@@ -39,9 +38,7 @@ const ViewListing = () => {
           if (data.results.length > 0) {
             const location = data.results[0].geometry.location;
             setCoordinates({ lat: location.lat, lng: location.lng });
-
           } else {
-
             console.error('Geocoding failed: No results found');
           }
         } catch (error) {
@@ -60,6 +57,20 @@ const ViewListing = () => {
   return (
     <div>
       <h2>{listing.title || "No Title Available"}</h2>
+
+      {/* Display images if they exist */}
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+        {listing.image_url_1 && (
+          <img src={listing.image_url_1} alt="Listing Image 1" style={{ width: '200px', height: 'auto' }} />
+        )}
+        {listing.image_url_2 && (
+          <img src={listing.image_url_2} alt="Listing Image 2" style={{ width: '200px', height: 'auto' }} />
+        )}
+        {listing.image_url_3 && (
+          <img src={listing.image_url_3} alt="Listing Image 3" style={{ width: '200px', height: 'auto' }} />
+        )}
+      </div>
+
       <p>{listing.description || "No Description Available"}</p>
       <p>
         Location: {listing.address || "Address not provided"}, {listing.city || "City not provided"}, {listing.state || "State not provided"}
@@ -75,11 +86,11 @@ const ViewListing = () => {
         {coordinates ? (
           <GoogleMapReact
             bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
-            center={coordinates} // Ensure the map centers on the coordinates
-            defaultZoom={15} // Adjust zoom for better focus on the exact location
+            center={coordinates}
+            defaultZoom={15}
           >
             {/* Marker */}
-            <div lat={coordinates.lat} lng={coordinates.lng} style={{ color: 'red', fontSize: '24px' }}>
+            <div lat={coordinates.lat} lng={coordinates.lng} style={{ color: 'red', fontSize: '51px' }}>
               📍
             </div>
           </GoogleMapReact>
