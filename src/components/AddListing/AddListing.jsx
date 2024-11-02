@@ -2,11 +2,13 @@ import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const libraries = ["places"];
 
 const AddListing = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -56,8 +58,6 @@ const AddListing = () => {
     }
   };
   
-  
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -76,23 +76,20 @@ const AddListing = () => {
       },
     });
 
-    // Clear input fields
-    setTitle('');
-    setDescription('');
-    setImageUrls(['', '', '']);
-    setPhoneNumber('');
-    setAddress('');
-    setCity('');
-    setState('');
     setSuccessMessage('Listing added!');
-
-    setTimeout(() => setSuccessMessage(''), 400);
+    setTimeout(() => {
+      setSuccessMessage('');
+      history.push('/listings'); // Redirect to the listings page after submission
+    }, 500);
   };
 
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <div>
+      <button onClick={() => history.push('/listings')} style={{ marginBottom: '20px' }}>
+        &larr; Back to Listings
+      </button>
       <h2>Add a New Listing</h2>
       <form onSubmit={handleSubmit}>
         <input
