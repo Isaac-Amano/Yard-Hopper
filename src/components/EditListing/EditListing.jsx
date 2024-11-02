@@ -12,10 +12,12 @@ const EditListing = () => {
   // Initialize form fields, including address, city, state, and image URLs
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [imageUrls, setImageUrls] = useState(['', '', '']); 
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [imageUrls, setImageUrls] = useState(['', '', '']); // Array to hold up to 3 image URLs
+  // Array to hold up to 3 image URLs
 
   // Load existing listing details into form fields on mount
   useEffect(() => {
@@ -23,11 +25,12 @@ const EditListing = () => {
 
       console.log("Loaded listing from Redux:", listing);
 
-      setTitle(listing.title || '');
+    setTitle(listing.title || '');
     setDescription(listing.description || '');
     setAddress(listing.address || '');
     setCity(listing.city || '');
     setState(listing.state || '');
+    setPhoneNumber(listing.phoneNumber || '');
     setImageUrls([listing.image_url_1, listing.image_url_2, listing.image_url_3]);
   }
 }, [listing]);
@@ -59,12 +62,13 @@ const EditListing = () => {
         id,
         title,
         description,
-        address,
-        city,
-        state,
         image_url_1: imageUrls[0],
         image_url_2: imageUrls[1],
         image_url_3: imageUrls[2],
+        phoneNumber,
+        address,
+        city,
+        state,
       },
     });
   };
@@ -104,6 +108,13 @@ const EditListing = () => {
           placeholder="State"
           value={state}
           onChange={(e) => setState(e.target.value)}
+        />
+
+<input
+          type="text"
+          placeholder="Phone Number"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
         />
         
         {/* Image upload inputs */}

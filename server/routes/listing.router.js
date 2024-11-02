@@ -75,6 +75,7 @@ router.get('/mylistings', rejectUnauthenticated, (req, res) => {
 // Create a new listing
 router.post('/', rejectUnauthenticated, (req, res) => {
   const {
+    id,
     title,
     description,
     image_url_1,
@@ -92,7 +93,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *;
   `;
   const queryParams = [title, description, image_url_1, image_url_2, image_url_3, phone_number, address, city, state, user_id];
-
+ console.log( 'query params are:' , queryParams);
   pool.query(queryText, queryParams)
     .then(result => res.json(result.rows[0]))
     .catch(error => {
@@ -130,7 +131,7 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
   const listingId = req.params.id;
   const userId = req.user.id;
 
-  const { title, description, phone_number, address, city, state, image_url_1, image_url_2, image_url_3 } = req.body;
+  const { title, description, phoneNumber, address, city, state, image_url_1, image_url_2, image_url_3 } = req.body;
 
   console.log("Updating Listing ID:", listingId);     
   console.log("User ID:", userId);                  
@@ -143,7 +144,8 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
     WHERE id = $10 AND user_id = $11
     RETURNING *;
   `;
-  const queryParams = [title, description, phone_number, address, city, state, image_url_1, image_url_2, image_url_3, listingId, userId];
+  const queryParams = [title, description, phoneNumber, address, city, state, image_url_1, image_url_2, image_url_3, listingId, userId];
+  console.log( 'query params are:' , queryParams);
 
   pool.query(queryText, queryParams)
     .then((result) => {
