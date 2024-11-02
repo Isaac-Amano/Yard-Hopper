@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom'; // Import useHistory
 import axios from 'axios';
-
 
 const EditListing = () => {
   const dispatch = useDispatch();
+  const history = useHistory(); // Initialize useHistory
   const { id } = useParams();
-  const listing = useSelector((state) => state.currentListing); // Assuming you have current listing in state
+  const listing = useSelector((state) => state.currentListing);
 
-  // Initialize form fields, including address, city, state, and image URLs
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrls, setImageUrls] = useState(['', '', '']); 
@@ -17,26 +16,19 @@ const EditListing = () => {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  // Array to hold up to 3 image URLs
 
-  // Load existing listing details into form fields on mount
   useEffect(() => {
     if (listing) {
+      setTitle(listing.title || '');
+      setDescription(listing.description || '');
+      setAddress(listing.address || '');
+      setCity(listing.city || '');
+      setState(listing.state || '');
+      setPhoneNumber(listing.phoneNumber || '');
+      setImageUrls([listing.image_url_1, listing.image_url_2, listing.image_url_3]);
+    }
+  }, [listing]);
 
-      console.log("Loaded listing from Redux:", listing);
-
-    setTitle(listing.title || '');
-    setDescription(listing.description || '');
-    setAddress(listing.address || '');
-    setCity(listing.city || '');
-    setState(listing.state || '');
-    setPhoneNumber(listing.phoneNumber || '');
-    setImageUrls([listing.image_url_1, listing.image_url_2, listing.image_url_3]);
-  }
-}, [listing]);
-
-
-  // Handler for image upload
   const handleImageUpload = async (event, index) => {
     const formData = new FormData();
     formData.append('image', event.target.files[0]);
@@ -46,9 +38,8 @@ const EditListing = () => {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       const updatedImageUrls = [...imageUrls];
-      updatedImageUrls[index] = response.data.url; // Set the URL at the correct index
-      setImageUrls(updatedImageUrls); // Update the state with the new image URL
-      console.log(`Uploaded image ${index + 1} URL:`, response.data.url);
+      updatedImageUrls[index] = response.data.url;
+      setImageUrls(updatedImageUrls);
     } catch (error) {
       console.error('Error uploading image:', error);
     }
@@ -71,10 +62,14 @@ const EditListing = () => {
         state,
       },
     });
+    history.push('/mylistings'); // Redirect to My Listings after submitting
   };
 
   return (
     <div>
+      <button onClick={() => history.push('/mylistings')} style={{ marginBottom: '20px' }}>
+        &larr; Back to My Listings
+      </button>
       <h2>Edit Listing</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -109,15 +104,13 @@ const EditListing = () => {
           value={state}
           onChange={(e) => setState(e.target.value)}
         />
-
-<input
+        <input
           type="text"
           placeholder="Phone Number"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
-        
-        {/* Image upload inputs */}
+
         {[0, 1, 2].map((index) => (
           <div key={index}>
             <input
@@ -130,7 +123,6 @@ const EditListing = () => {
             )}
           </div>
         ))}
-
         <button type="submit">Save Changes</button>
       </form>
     </div>
