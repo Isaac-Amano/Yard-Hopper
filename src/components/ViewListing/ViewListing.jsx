@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams ,useHistory} from 'react-router-dom';
 import GoogleMapReact from 'google-map-react';
+
 
 const ViewListing = () => {
   const dispatch = useDispatch();
+  const history = useHistory();  
   const { id } = useParams();
   const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const listing = useSelector((state) => state.currentListing);
@@ -56,6 +58,10 @@ const ViewListing = () => {
 
   return (
     <div>
+
+<button onClick={() => history.push('/listings')} style={{ marginBottom: '20px' }}>
+        &larr; Back to Listings
+      </button>
       <h2>{listing.title || "No Title Available"}</h2>
 
       {/* Display images if they exist */}
