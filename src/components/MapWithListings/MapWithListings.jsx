@@ -1,22 +1,21 @@
-// src/components/Listings/Listings.jsx
+// src/components/MapWithListings/MapWithListings.jsx
 
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import './listings.css';
+import './MapWithListings.css';
 
 const containerStyle = {
-  width: '70%',
-  height: '80vh',
+  width: '100%',
+  height: '400px',
 };
 
 const center = {
-  lat: 44.9778, // Default to a central point, e.g., Minneapolis
-  lng: -93.2650,
+  lat: 44.9778, // Default to a central point
 };
 
-const Listings = () => {
+const MapWithListings = () => {
   const dispatch = useDispatch();
   const listings = useSelector((state) => state.listings);
   const [selectedListing, setSelectedListing] = useState(null);
@@ -26,14 +25,26 @@ const Listings = () => {
   });
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_ALL_LISTINGS' }); // Fetch all listings initially
+    dispatch({ type: 'FETCH_ALL_LISTINGS' });
   }, [dispatch]);
 
-  if (!isLoaded) return <div>Loading map...</div>;
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <div className="listings-page">
-      {/* Sidebar for listings */}
+    <div className="map-listings-container">
+      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+        {listings.map((listing) => (
+          <Marker
+            key={listing.id}
+            position={{
+              lat: parseFloat(listing.latitude),
+              lng: parseFloat(listing.longitude),
+            }}
+            onClick={() => setSelectedListing(listing)}
+          />
+        ))}
+      </GoogleMap>
+      
       <div className="listings-sidebar">
         <h2>Garage Sales Near You</h2>
         {listings.map((listing) => (
@@ -46,22 +57,8 @@ const Listings = () => {
           </div>
         ))}
       </div>
-
-      {/* Map container */}
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-        {listings.map((listing) => (
-          <Marker
-            key={listing.id}
-            position={{
-              lat: parseFloat(listing.latitude), // Ensure your listings have latitude & longitude
-              lng: parseFloat(listing.longitude),
-            }}
-            onClick={() => setSelectedListing(listing)}
-          />
-        ))}
-      </GoogleMap>
     </div>
   );
 };
 
-export default Listings;
+export default MapWithListings;

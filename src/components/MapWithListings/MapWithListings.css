@@ -1,0 +1,33 @@
+/* src/components/MapWithListings/MapWithListings.css */
+
+.map-listings-container {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .listings-sidebar {
+    width: 300px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+  }
+  
+  .listing-item {
+    margin-bottom: 15px;
+  }
+  
+  .details-button {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 5px 10px;
+    color: white;
+    background-color: #4caf50;
+    text-decoration: none;
+    border-radius: 3px;
+    font-weight: bold;
+  }
+  
+  .details-button:hover {
+    background-color: #388e3c;
+  }
+  
