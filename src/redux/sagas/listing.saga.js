@@ -71,6 +71,15 @@ function* deleteListing(action) {
   }
 }
 
+function* fetchFilteredListings(action) {
+  try {
+    const response = yield axios.get(`/api/listings?search=${action.payload}`);
+    yield put({ type: 'SET_LISTINGS', payload: response.data });
+  } catch (error) {
+    console.error('Error fetching filtered listings:', error);
+  }
+}
+
 // Root saga to watch for listing-related actions
 function* listingsSaga() {
   yield takeLatest('FETCH_ALL_LISTINGS', fetchAllListings);  // Watch for fetching all listings
@@ -79,6 +88,7 @@ function* listingsSaga() {
   yield takeLatest('UPDATE_LISTING', updateListing);  // Watch for updating a listing
   yield takeLatest('DELETE_LISTING', deleteListing);  // Watch for deleting a listing
   yield takeLatest('FETCH_USER_LISTINGS', fetchUserListing);  // Watch for fetching user-specific listings
+  yield takeLatest('FETCH_FILTERED_LISTINGS', fetchFilteredListings);
 }
 
 export default listingsSaga;

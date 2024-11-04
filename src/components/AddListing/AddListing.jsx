@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import './AddListing.css';
+
 
 const libraries = ["places"];
 
