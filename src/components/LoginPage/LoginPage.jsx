@@ -1,25 +1,32 @@
+// src/components/LoginPage/LoginPage.jsx
+
 import React from 'react';
 import LoginForm from '../LoginForm/LoginForm';
 import { useHistory } from 'react-router-dom';
+import logo from '../LogoImage/Yard Hopper.png';
+import './LoginPage.css';
 
 function LoginPage() {
   const history = useHistory();
 
   return (
-    <div>
-      <LoginForm />
+    <div className="login-container">
+      {/* Logo Display */}
+      <img src={logo} alt="Yard Hopper Logo" className="logo" />
 
-      <center>
+      <div className="login-card">
+        <LoginForm />
+
         <button
           type="button"
-          className="btn btn_asLink"
+          className="register-button"
           onClick={() => {
             history.push('/registration');
           }}
         >
           Register
         </button>
-      </center>
+      </div>
     </div>
   );
 }

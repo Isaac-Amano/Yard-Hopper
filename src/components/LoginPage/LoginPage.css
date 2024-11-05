@@ -1,0 +1,44 @@
+/* src/components/LoginPage/LoginPage.css */
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #008C94 40%, #004d52);
+    font-family: 'Poppins', sans-serif;
+    padding: 20px;
+  }
+  
+  .logo {
+    width: 180px;
+    margin-bottom: 40px;
+  }
+  
+  .login-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .register-button {
+    margin-top: 20px;
+    font-size: 15px;
+    color: #00acb0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  
+  .register-button:hover {
+    color: #00757b;
+  }
+  

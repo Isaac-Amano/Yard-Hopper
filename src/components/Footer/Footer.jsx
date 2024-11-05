@@ -1,13 +1,78 @@
 import React from 'react';
-import './Footer.css';
-
-// This is one of our simplest components
-// It doesn't have local state, so it can be a function component.
-// It doesn't dispatch any redux actions or display any part of redux state
-// or even care what the redux state is, so it doesn't need 'connect()'
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 function Footer() {
-  return <footer>&copy;Yard Hopper 2024</footer>;
+  const styles = {
+    footer: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#008C94', // Teal color from your logo
+      color: '#ffffff',
+      padding: '10px 0',
+      fontSize: '14px',
+      textAlign: 'center',
+      fontFamily: 'Arial, sans-serif',
+    },
+    logo: {
+      fontSize: '16px',
+      fontWeight: 'bold',
+      marginBottom: '5px',
+    },
+    socialIcons: {
+      display: 'flex',
+      gap: '15px',
+      fontSize: '18px',
+      margin: '10px 0',
+    },
+    socialIcon: {
+      color: '#ffffff',
+      transition: 'color 0.3s ease',
+      cursor: 'pointer',
+    },
+    socialIconHover: {
+      color: '#ffffff88', // Slightly transparent white on hover
+    },
+  };
+
+  return (
+    <footer style={styles.footer}>
+      <div style={styles.logo}>&copy; Yard Hopper 2024</div>
+      <div style={styles.socialIcons}>
+        <a
+          href="https://www.facebook.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.socialIcon}
+          onMouseEnter={(e) => (e.currentTarget.style.color = styles.socialIconHover.color)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = styles.socialIcon.color)}
+        >
+          <FaFacebook />
+        </a>
+        <a
+          href="https://www.twitter.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.socialIcon}
+          onMouseEnter={(e) => (e.currentTarget.style.color = styles.socialIconHover.color)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = styles.socialIcon.color)}
+        >
+          <FaTwitter />
+        </a>
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.socialIcon}
+          onMouseEnter={(e) => (e.currentTarget.style.color = styles.socialIconHover.color)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = styles.socialIcon.color)}
+        >
+          <FaInstagram />
+        </a>
+      </div>
+    </footer>
+  );
 }
 
 export default Footer;
