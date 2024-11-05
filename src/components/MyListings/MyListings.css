@@ -1,0 +1,132 @@
+/* src/components/MyListings/MyListings.css */
+
+.my-listings-container {
+    padding: 20px;
+    background-color: #eaf3fa; /* Light blue background for consistency */
+    min-height: 100vh;
+  }
+  
+  .my-listings-header {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    margin-bottom: 20px;
+    text-align: left; /* Left-align header */
+  }
+  
+  .listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Smaller grid squares */
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .listing-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    font-family: 'Verdana', sans-serif;
+    height: 300px; /* Square-like appearance */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .listing-card:hover {
+    transform: translateY(-5px); /* Subtle hover effect */
+  }
+  
+  .card-header {
+    background-color: #e0e0e0;
+    height: 120px; /* Smaller image area */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .card-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .card-content {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .listing-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 4px;
+  }
+  
+  .listing-info {
+    font-size: 12px; /* Smaller font for description */
+    color: #555;
+    margin-bottom: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit to 3 lines */
+    -webkit-box-orient: vertical;
+  }
+  
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-top: 1px solid #ddd;
+    background-color: #f9f9f9;
+  }
+  
+  .edit-button,
+  .delete-button,
+  .back-button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+  }
+  
+  .edit-button {
+    background-color: #4CAF50; /* Green for edit */
+    color: white;
+  }
+  
+  .edit-button:hover {
+    background-color: #388E3C;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .delete-button {
+    background-color: #f44336; /* Red for delete */
+    color: white;
+  }
+  
+  .delete-button:hover {
+    background-color: #D32F2F;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .back-button {
+    background-color: #2196F3; /* Blue for back button */
+    color: white;
+    margin-bottom: 20px;
+    padding: 8px 14px; /* Slightly larger button for back */
+  }
+  
+  .back-button:hover {
+    background-color: #1976D2;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  

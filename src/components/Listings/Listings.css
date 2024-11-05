@@ -61,7 +61,7 @@ h2 {
 }
 
 .search-bar button.clear-button {
-  background-color: #f44336; /* Red for clear button */
+  background-color: gray; /* Red for clear button */
 }
 
 .search-bar button:hover {

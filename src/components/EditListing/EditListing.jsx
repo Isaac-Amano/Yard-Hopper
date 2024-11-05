@@ -1,34 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom'; // Import useHistory
+import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
+import './editlisting.css';
 
 const EditListing = () => {
   const dispatch = useDispatch();
-  const history = useHistory(); // Initialize useHistory
+  const history = useHistory();
   const { id } = useParams();
+  
+  // Fetch the current listing from the Redux state
   const listing = useSelector((state) => state.currentListing);
 
+  // Local state for form inputs
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [imageUrls, setImageUrls] = useState(['', '', '']); 
+  const [imageUrls, setImageUrls] = useState(['', '', '']);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
 
+  // Fetch the listing details when component mounts
   useEffect(() => {
-    if (listing) {
+    // Dispatch an action to fetch the listing by id if not already available
+    if (!listing || listing.id !== parseInt(id)) {
+      dispatch({ type: 'FETCH_SINGLE_LISTING', payload: id });
+    } else {
+      // Populate the form fields with the current listing data
       setTitle(listing.title || '');
       setDescription(listing.description || '');
       setAddress(listing.address || '');
       setCity(listing.city || '');
       setState(listing.state || '');
-      setPhoneNumber(listing.phoneNumber || '');
-      setImageUrls([listing.image_url_1, listing.image_url_2, listing.image_url_3]);
+      setPhoneNumber(listing.phone_number || '');
+      setImageUrls([
+        listing.image_url_1 || '',
+        listing.image_url_2 || '',
+        listing.image_url_3 || ''
+      ]);
     }
-  }, [listing]);
+  }, [listing, id, dispatch]);
 
+  // Handle image upload function
   const handleImageUpload = async (event, index) => {
     const formData = new FormData();
     formData.append('image', event.target.files[0]);
@@ -45,6 +59,7 @@ const EditListing = () => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch({
@@ -56,7 +71,7 @@ const EditListing = () => {
         image_url_1: imageUrls[0],
         image_url_2: imageUrls[1],
         image_url_3: imageUrls[2],
-        phoneNumber,
+        phone_number: phoneNumber,
         address,
         city,
         state,
@@ -66,8 +81,8 @@ const EditListing = () => {
   };
 
   return (
-    <div>
-      <button onClick={() => history.push('/mylistings')} style={{ marginBottom: '20px' }}>
+    <div className="edit-listing-container">
+      <button onClick={() => history.push('/mylistings')} className="back-button">
         &larr; Back to My Listings
       </button>
       <h2>Edit Listing</h2>
@@ -112,14 +127,14 @@ const EditListing = () => {
         />
 
         {[0, 1, 2].map((index) => (
-          <div key={index}>
+          <div className="image-upload" key={index}>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => handleImageUpload(e, index)}
             />
             {imageUrls[index] && (
-              <img src={imageUrls[index]} alt={`Uploaded ${index + 1}`} style={{ width: '100px', marginTop: '10px' }} />
+              <img src={imageUrls[index]} alt={`Uploaded ${index + 1}`} className="image-preview" />
             )}
           </div>
         ))}
