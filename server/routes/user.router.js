@@ -12,10 +12,6 @@ const router = express.Router();
 router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
-
-// Handles POST request with new user data
-// The only thing different from this and every other post we've seen
-// is that the password gets encrypted before being inserted
 router.post('/register', (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
@@ -31,7 +27,7 @@ router.post('/register', (req, res, next) => {
     });
 });
 
-// 
+
 router.post('/login', userStrategy.authenticate('local'), (req, res) => {
   res.sendStatus(200);
 });

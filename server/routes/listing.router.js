@@ -70,9 +70,6 @@ router.get('/mylistings', rejectUnauthenticated, (req, res) => {
       res.status(500).json({ error: 'issue is here' });
     });
 });
-
-
-// Create a new listing
 router.post('/', rejectUnauthenticated, (req, res) => {
   const {
     id,
@@ -102,8 +99,6 @@ router.post('/', rejectUnauthenticated, (req, res) => {
     });
 });
 
-
-// Delete a listing by ID
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
   const listingId = req.params.id;
   const userId = req.user.id; 
@@ -126,7 +121,6 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
   });
 });
 
-// Update a listing
 router.put('/:id', rejectUnauthenticated, (req, res) => {
   const listingId = req.params.id;
   const userId = req.user.id;

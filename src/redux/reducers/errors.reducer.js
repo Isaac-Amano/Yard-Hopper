@@ -1,7 +1,4 @@
 import { combineReducers } from 'redux';
-
-// loginMessage holds the string that will display
-// on the login screen if there's an error
 const loginMessage = (state = '', action) => {
   switch (action.type) {
     case 'CLEAR_LOGIN_ERROR':
@@ -17,8 +14,6 @@ const loginMessage = (state = '', action) => {
   }
 };
 
-// registrationMessage holds the string that will display
-// on the registration screen if there's an error
 const registrationMessage = (state = '', action) => {
   switch (action.type) {
     case 'CLEAR_REGISTRATION_ERROR':
@@ -31,10 +26,6 @@ const registrationMessage = (state = '', action) => {
       return state;
   }
 };
-
-// make one object that has keys loginMessage, registrationMessage
-// these will be on the redux state at:
-// state.errors.loginMessage and state.errors.registrationMessage
 export default combineReducers({
   loginMessage,
   registrationMessage,

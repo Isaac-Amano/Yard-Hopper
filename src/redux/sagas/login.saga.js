@@ -1,10 +1,10 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-// worker Saga: will be fired on "LOGIN" actions
+
 function* loginUser(action) {
   try {
-    // clear any existing error on the login page
+    
     yield put({ type: 'CLEAR_LOGIN_ERROR' });
 
     const config = {
